@@ -19,9 +19,13 @@ if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
     }
 fi
 
+#CREATE VOLUME
+docker volume create myjenkins
+
 #RUN JENKINS CONTAINER
 echo "Starting Jenkins container ..."
-docker run -p $JENKINS_PORT:8080 -p 5000:5000 -d -v jenkins_home:/var/jenkins_home --name $CONTAINER_NAME $DOCKER_IMAGE || {
+#docker run -p $JENKINS_PORT:8080 -p 5000:5000 -d -v jenkins_home:/var/jenkins_home --name $CONTAINER_NAME $DOCKER_IMAGE || {
+docker run --name $CONTAINER_NAME $DOCKER_IMAGE -p $JENKINS_PORT:8080 -p 5000:5000 -d -v myjenkins:/var/jenkins_home || {
     echo "Failed to start Jenkins container."
     exit 1
 }
